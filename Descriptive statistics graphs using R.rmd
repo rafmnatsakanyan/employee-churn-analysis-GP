@@ -1,0 +1,89 @@
+---
+title: "BA - Descriptive Statistics"
+author: "Sona Khloyan, Rafayel Mnatsakanyan, Perchuhi Proshyan"
+date: "2022-12-13"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(ggplot2)
+library(knitr)
+library(dplyr)
+library(ggthemes)
+```
+
+
+```{r}
+turnover <- read.csv("turnover_data.csv")
+head(turnover)
+
+```
+```{r}
+summary(turnover)
+```
+
+
+```{r}
+ggplot(turnover, aes(x = time_spend_company)) +geom_histogram( bins = 8, fill="#69b3a2", color="#e9ecef", alpha=0.9) + labs(x = "Total time an employee has spent in the company", y = "")+
+ggtitle("Distribution of the total time employee has spent in the company") 
+
+```
+By this graph we see and confirm the pattern that employees mostly leave the company after 2-5 years, maybe for personal and career growth. Also, employees do not spend more than 10 years in one company. 
+
+```{r}
+ggplot(turnover, aes(x = last_evaluation)) + geom_density(fill="#E69F00", color="black", alpha=0.8) + theme_classic() + labs(title = "Distribution of last evaluation results", x ="Last evaluation results", y = "")
+```
+The results of last evaluation are visualized above which mostly lay in range lower than 0.6 . Lower quantity of employees have result of 0.9.
+
+```{r}
+ggplot(turnover, aes(x = average_montly_hours, fill = factor(churn))) + 
+  geom_histogram(binwidth = 10, alpha=0.7) + 
+  labs(title = "Distribution of the total time employee has spent in the company",
+       x = "Average monthly hours spent on work", y = "") + 
+  scale_fill_manual(values = c("red", "blue"), labels = c("no churn","churn")) + 
+  theme(legend.title = element_blank(), legend.position = "top",
+        legend.direction = "horizontal",
+        panel.grid = element_line(linetype = "dotted", size = 0.7))
+```
+The plot above represents the distribution of average monthly hours employees spend on work, the coloring is done on factor whether the employees churn the company or not. Conclusion is that the more hours employees spend on work the likelier is that they'll stay in the company.
+
+
+```{r}
+ggplot(data = turnover, aes(x = satisfaction_level, fill = salary)) +
+  geom_histogram(bins = 10, alpha=0.7) + 
+  theme_bw() + 
+  facet_wrap(.~department) + 
+  labs(x = "Employee satisfication level", y = "",
+       title = "Distribution of employee satisfication level") + 
+  theme(legend.title = element_blank(), legend.position = "top",
+        legend.direction = "horizontal",
+        panel.grid = element_line(linetype = "dotted", size = 0.7))
+```
+The graph above represents the satisfactory level of employees in different departments. Coloring is done based on the salary level either it is low, medium or high. We can see that mostly people with medium salary have low satisfactory level. Also, we see that people in the management department are paid well, high (which is intuitive). The last thing is that employees in sales, support, and technical departments have comparatively higher satisfactory level.
+
+```{r}
+ggplot(turnover, aes(x = number_project, fill = factor(work_accident))) + 
+  geom_histogram(binwidth = 1) + 
+  labs(x = "Number of projects", y = "") + 
+  scale_fill_manual(values = c("red", "blue")) + 
+  ggtitle("Distribution of the total time employee has spent in the company") + 
+  theme_clean()+ 
+  theme(legend.title = element_blank(), legend.position = "top",
+        legend.direction = "horizontal", 
+        panel.grid = element_line(linetype = "dotted", size = 0.7)) 
+```
+The graph above represent the following:
+- The distribution of the number of projects can be considered to be normal, though it is a bit right skewed.The average number of projects an employee conducts at a time is 4.
+- Also, very little amount of employees experience work accidents. The accidents may happen regardless the number of projects employee conducts.
+
+```{r}
+ggplot(turnover, aes(x = churn, fill = salary)) + 
+  geom_bar(position = "fill") + 
+  facet_grid(.~promotion_last_5years) + 
+  scale_fill_manual(values = c("brown", "pink", "red")) + 
+  labs(x = "Has the employee left the company or not?",
+       y = "", title = "Proportion of churn") + 
+  theme_bw() + theme(panel.background = element_rect(color = "black"))
+```
+The graph above represents the proportion of churns taking into account the fact whether the employee had promotion during last 5 years or not.     We can see that in both cases employees with low salary churn the most. Also, among the ones who do not churn are employees with medium salary rate. 
